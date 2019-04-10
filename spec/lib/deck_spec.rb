@@ -3,8 +3,7 @@ require "spec_helper"
 describe Deck do
   let(:deck) { Deck.new } # Creates a variable that can be used for tests
 
-  describe "#build_deck" do
-    # Remember that the '#' in '#build_deck' means it's a method.
+  describe "#build_deck" do    
     it "builds a deck of 52 cards" do
       expect(deck.cards.size).to eq 52
     end
