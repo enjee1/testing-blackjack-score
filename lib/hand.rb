@@ -3,33 +3,36 @@ require_relative 'deck'
 class Hand
   def initialize(cards = [])
     @cards = cards
+    @score = nil
   end
 
   def calculate_hand
-    face_cards = [ 'J', 'Q', 'K', 'A']
-    sum = 0
-    @cards.each do |card|
-      if face_cards.include?(card.rank)
-        sum += score_face_cards(card.rank)
-      else
-        sum += card.rank
+    if @score == nil
+      @score = 0
+      sorted_cards = @cards.sort! { |card1, card2| card1.compare(card2) }
+      sorted_cards.each do |card|
+        if card.rank.class == Fixnum
+          @score += card.rank
+        elsif card.rank == "A"
+          if @score <= 10
+            @score += 11
+          else
+            @score += 1
+          end
+        else
+          @score += 10
+        end
       end
     end
-
-    if sum > 21 && @cards.any? { |card| card.rank == "A" }
-      sum -= 10
-    end
-
-    sum
+    @score
   end
 
-  def score_face_cards(rank)
-    card_value = 0
-    if rank == "A"
-      card_value = 11
-    else
-      card_value = 10
-    end
-    card_value
+  def cards
+    @cards.clone
+  end
+
+  def add_cards(new_cards)
+    @cards += new_cards
+    @score = nil
   end
 end
